@@ -7,9 +7,7 @@ var app = new Vue({
       priority: null,
       symptoms: ''
     },
-    //create variables for each form field and bind using v-model
-    newPtForm:{
-    }
+    newPtForm: {}
   },
   computed: {
     activePtName() {
@@ -17,56 +15,47 @@ var app = new Vue({
     }
   },
   methods: {
-    newPt(){
-      return{
-          //returns a brand new empty object
-          firstName:'',
-          lastName:'',
-          dob:'',
-          sexAtBirth:'',
-
+    newPtData() {
+      return {
+        firstName: "",
+        lastName: "",
+        dob: "",
+        sexAtBirth: ""
       }
     },
-    submitTriageForm( evt ) {
+    handleNewPtForm( evt ){
+      evt.preventDefault();  // Redundant w/ Vue's submit.prevent
+      /*
+      //TODO: Hook to API
+      fetch( url, {
+       method: "post",
+       data: data
+      })
+      */
+
+      console.log("Creating...!");
+      console.log(this.newPtForm);
+
+      this.ptList.push(this.newPtForm);
+
+      this.newPtForm = this.newPtData();
+    },
+    handleTriageForm( evt ) {
       console.log("Form submitted!");
 
       this.triageForm.pt = this.activePt;
       console.log(this.triageForm);
 
-    },
-    handleCreatePatient(evt){
-
-      evt.preventDefault(); //redundant, because we prevent it in the html file
-      //ToDo: actually creat the pt
-    //
-    //   // fetch(url,){
-    //     method:"POST",
-    //     data:
-    // })
-    // //POST
-    console.log("Creating");
-    console.log(this.newPtForm);
-
-    //when you hit submit, it'll appear on the list on the page whether or not it gets added to the databse
-    this.ptList.push(this.newPtForm);
-
-    // takes variable attached to the form and points it somewhere else
-    this.newPtForm = this.newPt();
-
     }
   },
-  //function that is a sibling of el and data
-  created(){
-    //fetch the url. If you can and fetch gets resolved, then run a function. But if you can't, then run the Error Function.
-    //making HTTP request to webserver to retrieve pt-list
+  created() {
     fetch("dummy/pt-list.php")
-    .then( response => response.json())
-    //returns JSONified response as part of promise
-    //above is shortcut way of writing .then ( function(response) {return response.json()})
-    .then( json => { //second promise
-          //this.project = json;
-          this.ptList = json; //assigns json object as the variable ptList in application
-          console.log(json)}
+    .then( response => response.json() )
+    .then( json => {
+      this.ptList = json;
+
+      console.log(json)}
     );
+    this.newPtForm = this.newPtData();
   }
 })
