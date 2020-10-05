@@ -14,6 +14,7 @@ if (isset($_GET['guid'])) {
   $vars = [ $_GET['guid'] ];
 }
 
+//Pass statement and then variables in next line
 $stmt = $db->prepare($sql);
 $stmt->execute($vars);
 
